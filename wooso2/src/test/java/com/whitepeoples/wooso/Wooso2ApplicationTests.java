@@ -1,4 +1,4 @@
-package org.example.wooso2;
+package com.whitepeoples.wooso;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

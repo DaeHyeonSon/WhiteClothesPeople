@@ -1,4 +1,4 @@
-package org.example.wooso2;
+package com.whitepeoples.wooso;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
