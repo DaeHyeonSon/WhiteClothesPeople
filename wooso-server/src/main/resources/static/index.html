@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FCM Token Receiver and Photo Upload</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+        let fcmToken = null;
+        let ip = "192.168.127.119"; // 서버가 실행되고 있는 IP를 이 변수에 설정
+
+        // 안드로이드에서 FCM 토큰을 전달받는 함수
+        function receiveToken(token) {
+            console.log("Received FCM Token: " + token);
+            fcmToken = token;
+
+            // 서버로 FCM 토큰을 전송
+            axios.post(`http://${ip}:8080/saveToken`, { token: token })
+                .then(response => {
+                    console.log('Token saved successfully:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error saving token:', error);
+                });
+        }
+
+        // 알림 전송 요청을 보내는 함수
+        function sendNotificationRequest() {
+            if (fcmToken) {
+                axios.post(`http://${ip}:8080/sendNotification`, {
+                    token: fcmToken,  // FCM 토큰을 함께 보냄
+                    title: 'Test Notification',
+                    body: 'This is a test notification sent from the server.'
+                })
+                    .then(response => {
+                        console.log('Notification sent successfully:', response.data);
+                        alert('Notification sent successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error sending notification:', error);
+                        alert('Error sending notification.');
+                    });
+            } else {
+                alert('FCM Token is not available. Please try again later.');
+            }
+        }
+
+        // 기존 함수들 유지
+        function pickContacts() {
+            if (window.Android) {
+                window.Android.pickContacts();
+            } else {
+                alert("This feature is only available on mobile devices.");
+            }
+        }
+
+        function receiveContacts(contactsJson) {
+            try {
+                const contacts = JSON.parse(contactsJson);
+                contacts.forEach(contact => {
+                    console.log("Name: " + contact.name + ", Phone Number: " + contact.phoneNumber);
+                });
+                console.log("Contacts received:", JSON.stringify(contacts, null, 2));
+            } catch (error) {
+                console.error("Error parsing contacts JSON:", error);
+            }
+        }
+
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                axios.post(`http://${ip}:8080/upload`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(response => {
+                    console.log('File uploaded successfully:', response.data);
+                    alert('File uploaded successfully!');
+
+                    const imageUrl = `http://${ip}:8080` + response.data.split('File URL: ')[1];
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imageUrl;
+                    imgElement.alt = 'Uploaded Image';
+                    imgElement.style.maxWidth = '500px';
+                    imgElement.style.marginTop = '20px';
+
+                    document.getElementById('uploadedImage').appendChild(imgElement);
+
+                }).catch(error => {
+                    console.error('Error uploading file:', error);
+                    alert('Error uploading file.');
+                });
+            } else {
+                alert('Please select a file first.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('fileInput').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    document.getElementById('fileName').textContent = `Selected file: ${file.name}`;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>FCM Token Receiver and Photo Upload</h1>
+<input type="file" id="fileInput" accept="image/*">
+<p id="fileName">No file selected</p>
+<button onclick="uploadFile()">Upload File</button>
+<br><br>
+<button onclick="pickContacts()">Pick Contacts</button>
+<br><br>
+<button onclick="sendNotificationRequest()">Send Notification Request</button><!-- 새로운 버튼 추가 -->
+<br><br>
+<div id="uploadedImage"></div> <!-- 업로드된 이미지를 표시할 공간 -->
+</body>
+</html>
