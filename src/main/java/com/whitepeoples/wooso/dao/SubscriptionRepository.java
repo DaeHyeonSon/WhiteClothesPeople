@@ -21,5 +21,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Inte
 
     // 필드를 통한 삭제
 //    void deleteByPlan(String plan);
+    
+    // userId로 Subscription 하나 조회
+    Optional<Subscription> findFirstByUser_UserId(Integer userId);
 
 }

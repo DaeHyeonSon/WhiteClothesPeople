@@ -15,25 +15,29 @@ import lombok.Data;
 @Table(name = "matching")
 @Data
 public class Matching {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer matchId;
+	   @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private Integer matchId;
 
-    @ManyToOne
-    @JoinColumn(name = "matchmaker_id")
-    private Guarantor matchmaker;
+	    @ManyToOne
+	    @JoinColumn(name = "request_matchmaker_id")
+	    private Guarantor requestMatchmaker;
 
-    @ManyToOne
-    @JoinColumn(name = "female_id")
-    private User female;
+	    @ManyToOne
+	    @JoinColumn(name = "response_matchmaker_id")
+	    private Guarantor responseMatchmaker;
 
-    @ManyToOne
-    @JoinColumn(name = "male_id")
-    private User male;
+	    @ManyToOne
+	    @JoinColumn(name = "request_user_id")
+	    private User requestUser;
 
-    private String matchType;
-    private String matchStatus;
-    private Timestamp createdAt;
+	    @ManyToOne
+	    @JoinColumn(name = "response_user_id")
+	    private User responseUser;
+
+	    private String matchType;
+	    private String matchStatus;
+	    private Timestamp createdAt;
 
     // Getters and Setters
 }
