@@ -7,8 +7,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "guarantor")
 @Data
@@ -18,6 +28,8 @@ public class Guarantor {
     private Integer guarantorId;
 
     private String name;
+    private String email;
+    private String password;
     private Boolean verificationStatus;
     private String guaranteeDocument;
     private String phoneNumber;
