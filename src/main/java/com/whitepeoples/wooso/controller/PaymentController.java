@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.whitepeoples.wooso.model.entity.Payment;
+import com.whitepeoples.wooso.service.PaymentService;
 import com.whitepeoples.wooso.service.PaymentServiceImpl;
 
 @Controller
 @RequestMapping("/payment")
 public class PaymentController {
 
-    private final PaymentServiceImpl paymentServiceImpl;
+    private final PaymentService paymentServiceImpl;
 
     @Value("${imp.api.key}")
     private String apiKey;
@@ -37,8 +38,8 @@ public class PaymentController {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
-
-    PaymentController(PaymentServiceImpl paymentServiceImpl) {
+ //  요기서 PaymentServiceImpl 타입을 PaymentService로 바꿨으.. 
+    PaymentController(PaymentService paymentServiceImpl) {
         this.paymentServiceImpl = paymentServiceImpl;
     }
 

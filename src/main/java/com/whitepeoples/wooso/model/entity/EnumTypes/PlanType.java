@@ -1,4 +1,4 @@
-package com.whitepeoples.wooso.model.entity;
+package com.whitepeoples.wooso.model.entity.EnumTypes;
 
 public enum PlanType {
     BASIC(9900),

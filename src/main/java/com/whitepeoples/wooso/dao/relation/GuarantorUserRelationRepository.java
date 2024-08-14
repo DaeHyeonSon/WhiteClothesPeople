@@ -19,45 +19,43 @@ public interface GuarantorUserRelationRepository extends JpaRepository<Guarantor
     List<GuarantorUserRelation> findByStatus(String status);
 
     // Guarantor ID로 조회
-    List<GuarantorUserRelation> findByGuarantor_Id(Integer guarantorId);
+   // List<GuarantorUserRelation> findByGuarantor_Id(Integer guarantorId);
 
-    // User ID로 조회
-    List<GuarantorUserRelation> findByUser_Id(Integer userId);
+    // follwer ID 로 조회
+//    List<GuarantorUserRelation> findByUser_Id(Integer userId);
 
     // Responder ID와 Responder Type으로 조회
-    List<GuarantorUserRelation> findByResponderIdAndResponderType(Integer responderId, String responderType);
+    List<GuarantorUserRelation> findByFollowerIdAndFollowerType(Integer followeId, String followerType);
 
     // 페이지로 조회
     Page<GuarantorUserRelation> findAll(Pageable pageable);
     
     // 단일 조회
-    Optional<GuarantorUserRelation> findById(Integer relationId);
+//    Optional<GuarantorUserRelation> findById(Integer relationId);
     
     
     @Query("SELECT r FROM GuarantorUserRelation r " +
-    	       "WHERE (r.followerGuarantor.guarantorId = :guarantorId AND"
-    	       + " r.followingUser.userId = :userId AND"
-    	       + " r.status = 'following' AND "
-    	       + " r.followerId = :userId) " +
-    	       "OR (r.followerGuarantor.guarantorId = :guarantorId AND "
-    	       + "r.followingUser.userId = :userId AND "
-    	       + "r.status = 'following' AND "
-    	       + "r.followerId = :guarantorId)")
+    	       "WHERE (r.followerGuarantor.guarantorId = :guarantorId AND " +
+    	       "r.followingUser.userId = :userId AND " +
+    	       "r.status = 'following' AND " +
+    	       "r.followerId = :userId AND r.followerType = 'user') " +
+    	       "OR (r.followerGuarantor.guarantorId = :guarantorId AND " +
+    	       "r.followingUser.userId = :userId AND " +
+    	       "r.status = 'following' AND " +
+    	       "r.followerId = :guarantorId AND r.followerType = 'guarantor')")
     	List<GuarantorUserRelation> findGuarantorUserMutualFollowing(
     	       @Param("guarantorId") Integer guarantorId, 
     	       @Param("userId") Integer userId);
-    
-    @Query("SELECT COUNT(r) FROM GuarantorUserRelation r " +
-    	       "WHERE "
-    	       + "(r.followerGuarantor.guarantorId = :guarantorId AND"
-    	       + " r.followingUser.userId = :userId AND"
-    	       + " r.status = 'following' AND"
-    	       + " r.followerId = :userId) " +
-    	       "OR "
-    	       + "(r.followerGuarantor.guarantorId = :guarantorId AND"
-    	       + " r.followingUser.userId = :userId AND"
-    	       + " r.status = 'following' AND"
-    	       + " r.followerId = :guarantorId)")
+
+    	@Query("SELECT COUNT(r) FROM GuarantorUserRelation r " +
+    	       "WHERE (r.followerGuarantor.guarantorId = :guarantorId AND " +
+    	       "r.followingUser.userId = :userId AND " +
+    	       "r.status = 'following' AND " +
+    	       "r.followerId = :userId AND r.followerType = 'user') " +
+    	       "OR (r.followerGuarantor.guarantorId = :guarantorId AND " +
+    	       "r.followingUser.userId = :userId AND " +
+    	       "r.status = 'following' AND " +
+    	       "r.followerId = :guarantorId AND r.followerType = 'guarantor')")
     	Long countGuarantorUserMutualFollowing(
     	       @Param("guarantorId") Integer guarantorId, 
     	       @Param("userId") Integer userId);

@@ -64,6 +64,7 @@ public class MatchingServiceImpl implements MatchingService {
 						, "active");
 				
 		if(oRequestMatching.isPresent())  throw new Exception();
+		
 		// 사용자의 구독 모델 && 매칭개수 확인 
 		Subscription subscription = oSubscription.get();
 		if(!(subscription.getRemainingMatches() > 0)) throw new Exception();
@@ -84,6 +85,7 @@ public class MatchingServiceImpl implements MatchingService {
 				.build()
 				);
 		res = true;
+		
 		// 주선자한태 알림
 		//FCM 알림을 통해 알림 
 		

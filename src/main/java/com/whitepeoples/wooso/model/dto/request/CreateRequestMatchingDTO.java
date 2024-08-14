@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 public class CreateRequestMatchingDTO {
