@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,30 +18,29 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "subscription")
+@Table(name = "subpayment")
 @Data
-public class Subscription {
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "subscription_id")
-    private Integer subscriptionId;
+    @Column(name = "payment_id")
+    private Integer paymentId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
+    @JoinColumn(name = "subscription_id", nullable = false)
+    private Subscription subscription;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "plan", length = 50)
-    private PlanType plan;
+    @Column(name = "payment_date")
+    private LocalDate paymentDate;
 
-    @Column(name = "price")
-    private Integer price;
+    @Column(name = "amount")
+    private Integer amount;
 
-    @Column(name = "remaining_matches")
-    private Integer remainingMatches;
+    @Column(name = "merchant_id", length = 50)
+    private String merchantId;
 
-    @Column(name = "next_pay_date")
-    private LocalDate nextPayDate;
+    @Column(name = "is_refundable")
+    private Boolean isRefundable;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -55,23 +52,16 @@ public class Subscription {
     public void onPrePersist() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-
-        // 선택한 플랜의 가격을 자동으로 설정
-        if (this.plan != null) {
-            this.price = this.plan.getPrice();
-        }
+        this.isRefundable = true; // 기본값을 true로 설정
     }
 
-    // 엔티티가 업데이트될 때 호출되는 메소드
     @PreUpdate
     public void onPreUpdate() {
         this.updatedAt = LocalDateTime.now();
 
-        // 선택한 플랜의 가격을 자동으로 설정
-        if (this.plan != null) {
-            this.price = this.plan.getPrice();
+        // 결제일로부터 3일이 지났다면 isRefundable을 false로 설정
+        if (this.paymentDate != null && LocalDate.now().isAfter(this.paymentDate.plusDays(3))) {
+            this.isRefundable = false;
         }
     }
 }
-
-
