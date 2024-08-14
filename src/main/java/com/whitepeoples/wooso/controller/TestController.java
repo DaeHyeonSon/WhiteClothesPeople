@@ -50,42 +50,42 @@ public class TestController {
     @Transactional
     public String test() {
         // User Repository 테스트
-        System.out.println("=== User Repository 테스트 ===");
-        Optional<User> user = userRepository.findByUsername("user1");
-        user.ifPresent(System.out::println);
-
-        userRepository.deleteByUsername("user2");
-        System.out.println("Deleted user with username 'user2'");
-
-        // Profile Repository 테스트
-        System.out.println("=== Profile Repository 테스트 ===");
-        Optional<Profile> profile = profileRepository.findById(1);
-        profile.ifPresent(System.out::println);
-
-        // Guarantor Repository 테스트
-        System.out.println("=== Guarantor Repository 테스트 ===");
-        Optional<Guarantor> guarantor = guarantorRepository.findByGuarantorId(1);
-        guarantor.ifPresent(System.out::println);
-
-        // Matching Repository 테스트
-        System.out.println("=== Matching Repository 테스트 ===");
-        Optional<Matching> matching = matchingRepository.findByMatchId(1);
-        matching.ifPresent(System.out::println);
-
-        // Review Repository 테스트
-        System.out.println("=== Review Repository 테스트 ===");
-        Optional<Review> review = reviewRepository.findByReviewId(1);
-        review.ifPresent(System.out::println);
-
-        // Subscription Repository 테스트
-        System.out.println("=== Subscription Repository 테스트 ===");
-        Optional<Subscription> subscription = subscriptionRepository.findBySubscriptionId(1);
-        subscription.ifPresent(System.out::println);
+//        System.out.println("=== User Repository 테스트 ===");
+//        Optional<User> user = userRepository.findByUsername("user1");
+//        user.ifPresent(System.out::println);
+//
+//        userRepository.deleteByUsername("user2");
+//        System.out.println("Deleted user with username 'user2'");
+//
+//        // Profile Repository 테스트
+//        System.out.println("=== Profile Repository 테스트 ===");
+//        Optional<Profile> profile = profileRepository.findById(1);
+//        profile.ifPresent(System.out::println);
+//
+//        // Guarantor Repository 테스트
+//        System.out.println("=== Guarantor Repository 테스트 ===");
+//        Optional<Guarantor> guarantor = guarantorRepository.findByGuarantorId(1);
+//        guarantor.ifPresent(System.out::println);
+//
+//        // Matching Repository 테스트
+//        System.out.println("=== Matching Repository 테스트 ===");
+//        Optional<Matching> matching = matchingRepository.findByMatchId(1);
+//        matching.ifPresent(System.out::println);
+//
+//        // Review Repository 테스트
+//        System.out.println("=== Review Repository 테스트 ===");
+//        Optional<Review> review = reviewRepository.findByReviewId(1);
+//        review.ifPresent(System.out::println);
+//
+//        // Subscription Repository 테스트
+//        System.out.println("=== Subscription Repository 테스트 ===");
+//        Optional<Subscription> subscription = subscriptionRepository.findBySubscriptionId(1);
+//        subscription.ifPresent(System.out::println);
 
         // 페이지 네이션 테스트
         System.out.println("=== 페이지 네이션 테스트 ===");
         
-        Pageable pageable = PageRequest.of(0, 2); // 0번 페이지, 2개의 항목
+        Pageable pageable = PageRequest.of(0 , 3); // 0번 페이지, 2개의 항목
         Page<User> userPage = userRepository.findAll(pageable);
         userPage.forEach(System.out::println);
 
