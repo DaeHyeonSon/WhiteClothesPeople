@@ -20,6 +20,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Integer> {
     // 필드를 통한 조회
     Optional<Profile> findByUserAge(Integer userAge);
 
+	Profile findByEntityIdAndEntityType(Integer entityId, String entityType);
+
     // 필드를 통한 삭제
    // void deleteByUserAge(Integer userAge);
 
