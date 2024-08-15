@@ -14,7 +14,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Data
 public class SessionDTO {
 
 	private UserType userType; 

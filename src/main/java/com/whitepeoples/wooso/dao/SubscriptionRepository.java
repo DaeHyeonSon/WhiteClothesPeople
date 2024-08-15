@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.whitepeoples.wooso.model.entity.Subscription;
+import com.whitepeoples.wooso.model.entity.User;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, Integer> {
 
@@ -18,11 +19,12 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Inte
 
     // 필드를 통한 조회
     Optional<Subscription> findByPlan(String plan);
+    
+    Subscription findByUser(User user);
+    
+    Optional<Subscription> findFirstByUser_UserId(Integer userId);
 
     // 필드를 통한 삭제
 //    void deleteByPlan(String plan);
-    
-    // userId로 Subscription 하나 조회
-    Optional<Subscription> findFirstByUser_UserId(Integer userId);
 
 }

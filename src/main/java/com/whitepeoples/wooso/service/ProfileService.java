@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.whitepeoples.wooso.model.entity.Profile;
 import com.whitepeoples.wooso.model.entity.EnumTypes.UserType;
 
+import com.whitepeoples.wooso.model.entity.Profile;
+
 @Service
 public interface ProfileService {
 
@@ -16,4 +18,5 @@ public interface ProfileService {
 	void saveProfile(Profile profile);
 
 //	String saveProfileImage(MultipartFile profileImage);
+
 }
