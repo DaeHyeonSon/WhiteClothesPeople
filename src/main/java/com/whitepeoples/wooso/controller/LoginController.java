@@ -103,7 +103,8 @@ public class LoginController {
 				SessionDTO sessionDTO = new SessionDTO();
 				UserProfileDTO userProfileDTO = new UserProfileDTO();
 				
-				Profile profile = profileservice.findByEntityIdAndEntityType(user.getUserId(),"USER");
+				Optional<Profile> oProfile = profileservice.findByEntityIdAndEntityType(user.getUserId(),"USER");
+				Profile profile = oProfile.get();
 					
 					
 					 // DTO에 데이터 저장

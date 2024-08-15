@@ -1,5 +1,7 @@
 package com.whitepeoples.wooso.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class ProfileServiceImpl implements ProfileService{
 	private ProfileRepository profileRepository;
 	
 	@Override
-	public Profile findByEntityIdAndEntityType(Integer entityId, String entityType) {
+	public Optional<Profile> findByEntityIdAndEntityType(Integer entityId, String entityType) {
 		return profileRepository.findByEntityIdAndEntityType(entityId, entityType);
 	}
 }

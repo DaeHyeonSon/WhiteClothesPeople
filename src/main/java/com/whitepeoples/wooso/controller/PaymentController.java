@@ -27,13 +27,13 @@ public class PaymentController {
 
     private final PaymentService paymentServiceImpl;
 
-    @Value("${imp.api.key}")
+   // @Value("${imp.api.key}")
     private String apiKey;
 
-    @Value("${imp.api.secretkey}")
+   // @Value("${imp.api.secretkey}")
     private String secretKey;
 
-    @Value("${imp.init}")
+  //  @Value("${imp.init}")
     private String impCode;
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
