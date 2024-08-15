@@ -8,6 +8,11 @@ public class UserProfileDTO {
     private String email;
     private String description;
     private String mbti;
-    private String hobby;
+    private String hobbies;
+    private String address;
     private Integer age;
+    private String income;
+    private String userImgUrl;
 }
+
+

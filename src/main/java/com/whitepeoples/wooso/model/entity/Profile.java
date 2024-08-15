@@ -1,6 +1,10 @@
 package com.whitepeoples.wooso.model.entity;
 
+import com.whitepeoples.wooso.model.entity.EnumTypes.UserType;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +30,9 @@ public class Profile {
     private Integer profileId;
 
     private Integer entityId;
-    private String entityType;
+    
+    @Enumerated(EnumType.STRING)
+    private UserType entityType;
     private Integer userAge;
     private String userMbti;
     private String userHobby;

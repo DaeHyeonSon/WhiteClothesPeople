@@ -1,4 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.whitepeoples.wooso.model.dto.SessionDTO" %>
+
+<%
+    // 세션에서 SessionDTO를 가져옴
+    SessionDTO sessionDTO = (SessionDTO) session.getAttribute("SessionDTO");
+    
+    if (sessionDTO != null) {
+        // SessionDTO의 내용을 표준 출력(서버 콘솔)에 출력
+        System.out.println("MainPage Username: " + sessionDTO.getUserProfileDTO().getUsername());
+        System.out.println("MainPage Email: " + sessionDTO.getUserProfileDTO().getEmail());
+        System.out.println("MainPage Description: " + sessionDTO.getUserProfileDTO().getDescription());
+        System.out.println("MainPage MBTI: " + sessionDTO.getUserProfileDTO().getMbti());
+        System.out.println("MainPage Hobby: " + sessionDTO.getUserProfileDTO().getHobbies());
+        System.out.println("MainPage Age: " + sessionDTO.getUserProfileDTO().getAge());
+        System.out.println("MainPage Income: " + sessionDTO.getUserProfileDTO().getIncome());
+        System.out.println("MainPage Image URL: " + sessionDTO.getUserProfileDTO().getUserImgUrl());
+    } else {
+        System.out.println("SessionDTO is null");
+    }
+%>
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -9,7 +30,7 @@
     <style>
         @font-face {
             font-family: 'SBAggroB';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+           	src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
             font-weight: normal;
             font-style: normal;
         }
@@ -138,21 +159,24 @@
         <div class="main-content">
             <!-- User Profile Section -->
             <div class="profile-info">
-                <img src="https://via.placeholder.com/100" alt="Profile Picture">
+                <!-- <img src="https://via.placeholder.com/100" alt="Profile Picture"> -->
+                <img src="${pageContext.request.contextPath}${userImgUrl}" alt="Profile Picture" id="profile-picture">
                 <div class="details">
                     <h1>${username}님 환영합니다!</h1>
                     <p>${email}</p>
                 </div>
             </div>
+            
             <!-- Bio Section -->
             <div class="bio">
                 <p>${description}</p>
-                <p class="hashtags">${mbti} ${hobby} ${age}</p>
+                <p class="hashtags">${mbti}   ${hobbies} ${age}</p>
             </div>
+            
             <!-- Settings Section -->
             <div class="settings">
-                <a href="#">프로필 설정</a>
-                <a href="#">우소좀여</a>
+                <a href="${pageContext.request.contextPath}/profileEdit">프로필 설정</a>
+                <a href="#">우소좀여(매칭)</a>
                 <a href="#">구독 확인</a>
                 <a href="#">매칭 확인</a>
             </div>

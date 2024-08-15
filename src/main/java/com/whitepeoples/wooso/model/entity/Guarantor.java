@@ -41,6 +41,5 @@ public class Guarantor {
     @JoinColumn(name = "user_profile")
     private Profile userProfile;
 
-    // Getters and Setters
 }
 
