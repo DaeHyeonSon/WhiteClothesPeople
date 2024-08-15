@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-         
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,13 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <style>
-        body {
+        html, body {
+            height: 100%;
+            margin: 0;
             font-family: Arial, sans-serif;
+        }
+        body {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            margin: 0;
+            align-items: center;
             background-color: #f0f2f5;
         }
         .container {
@@ -75,6 +76,7 @@
             margin: 10px 0;
             color: #007bff;
             text-decoration: none;
+            cursor: pointer;
         }
         .settings a:hover {
             text-decoration: underline;
@@ -109,6 +111,18 @@
             font-size: 16px;
             color: #333;
         }
+        .subscription-info {
+            display: none;
+            margin-top: 10px;
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .subscription-info p {
+            margin: 5px 0;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -118,27 +132,31 @@
             <div class="profile-info">
                 <img src="https://via.placeholder.com/100" alt="Profile Picture">
                 <div class="details">
-                    <h1>${username}</h1>
-                    <p>@${email}</p>
+                    <h1>username</h1>
+                    <p>email</p>
                 </div>
             </div>
             <!-- Bio Section -->
             <div class="bio">
-                <p>${description}</p>
-                <p class="hashtags">#{mbti} #{hobby}#{age}</p>
+                <p>description</p>
+                <p class="hashtags">#mbti #hobby #age</p>
             </div>
             <!-- Settings Section -->
             <div class="settings">
                 <a href="#">프로필 설정</a>
                 <a href="#">우소좀여</a>
-                <a href="#">구독 확인</a>
+                <a href="#" id="toggleSubscription">구독 확인</a>
+                <div class="subscription-info" id="subscriptionInfo">
+                    <p>구독 요금제: 프리미엄 플랜</p>
+                    <p>갱신일: 2024년 8월 30일</p>
+                </div>
                 <a href="#">매칭 확인</a>
             </div>
         </div>
         <div class="right-sidebar">
             <!-- Suggested Users Section -->
             <div class="suggestions">
-                <h2>알 수 있는 사람들</h2>
+                <h2>알 수 있는 주선자들</h2>
                 <div class="user">
                     <img src="https://via.placeholder.com/50" alt="User Picture">
                     <div class="name">김철수</div>
@@ -154,6 +172,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById("toggleSubscription").addEventListener("click", function() {
+            var subscriptionInfo = document.getElementById("subscriptionInfo");
+            if (subscriptionInfo.style.display === "none" || subscriptionInfo.style.display === "") {
+                subscriptionInfo.style.display = "block";
+            } else {
+                subscriptionInfo.style.display = "none";
+            }
+        });
+    </script>
 </body>
 </html>
-         
+   

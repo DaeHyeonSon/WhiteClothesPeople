@@ -44,6 +44,9 @@ public class Subscription {
     @Column(name = "remaining_matches")
     private Integer remainingMatches;
 
+    @Column(name = "merchant_uid")
+    private String merchant_uid;
+    
     @Column(name = "next_pay_date")
     private LocalDate nextPayDate;
 

@@ -10,7 +10,7 @@ import com.whitepeoples.wooso.model.entity.EnumTypes.PlanType;
 
 @Service
 public interface SubscriptionService {
-	Subscription createSubscription(Integer userId, PlanType plan);
+	Subscription createSubscription(Integer userId, PlanType plan, String merchantId);
 	boolean canCancelSubscription(Optional<Subscription> currentSubscription);
 	void cancelSubscription(Optional<Subscription> currentSubscription);
 	Optional<Subscription> findByUser(User user); 
