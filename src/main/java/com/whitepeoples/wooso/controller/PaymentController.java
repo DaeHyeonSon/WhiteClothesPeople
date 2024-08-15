@@ -23,7 +23,6 @@ import com.whitepeoples.wooso.model.entity.Profile;
 import com.whitepeoples.wooso.model.entity.Subscription;
 import com.whitepeoples.wooso.model.entity.User;
 import com.whitepeoples.wooso.model.entity.EnumTypes.PlanType;
-import com.whitepeoples.wooso.model.entity.EnumTypes.UserType;
 import com.whitepeoples.wooso.service.PaymentService;
 import com.whitepeoples.wooso.service.ProfileService;
 import com.whitepeoples.wooso.service.SubscriptionService;
@@ -103,7 +102,7 @@ public class PaymentController {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
 
-		Profile profile = profileRepository.findByEntityIdAndEntityType(userId, UserType.USER)
+		Profile profile = profileRepository.findByEntityIdAndEntityType(userId, "USER")
 				.orElseThrow(() -> new IllegalArgumentException("해당 Profile 존재 X: " + userId));
 		Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
 		// Subscription subscription = currentSubscription.get();

@@ -46,9 +46,7 @@
             font-family: 'GmarketSansMedium', Arial, sans-serif; /* GmarketSansMedium 폰트 적용 */
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            margin: 0;
+            align-items: center;
             background-color: #f0f2f5;
         }
         .container {
@@ -114,7 +112,6 @@
             margin: 10px 0;
             color: #007bff;
             text-decoration: none;
-            font-family: 'GmarketSansMedium', Arial, sans-serif; /* GmarketSansMedium 폰트 적용 */
         }
         .settings a:hover {
             text-decoration: underline;
@@ -151,6 +148,18 @@
             font-size: 16px;
             color: #333;
             font-family: 'GmarketSansMedium', Arial, sans-serif; /* GmarketSansMedium 폰트 적용 */
+        }
+        .subscription-info {
+            display: none;
+            margin-top: 10px;
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .subscription-info p {
+            margin: 5px 0;
+            color: #333;
         }
     </style>
 </head>
@@ -200,5 +209,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById("toggleSubscription").addEventListener("click", function() {
+            var subscriptionInfo = document.getElementById("subscriptionInfo");
+            if (subscriptionInfo.style.display === "none" || subscriptionInfo.style.display === "") {
+                subscriptionInfo.style.display = "block";
+            } else {
+                subscriptionInfo.style.display = "none";
+            }
+        });
+    </script>
 </body>
 </html>

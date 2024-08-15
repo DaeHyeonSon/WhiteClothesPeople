@@ -13,6 +13,9 @@ import com.whitepeoples.wooso.model.entity.EnumTypes.UserType;
 
 import com.whitepeoples.wooso.model.entity.Profile;
 
+import com.whitepeoples.wooso.model.entity.Profile;
+import com.whitepeoples.wooso.model.entity.User;
+
 @Service
 public interface ProfileService {
 
