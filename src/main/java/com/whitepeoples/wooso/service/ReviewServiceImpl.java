@@ -59,8 +59,10 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public List<ReviewDTO> readAllReview(Integer reviewer) throws Exception {
 		Optional<User> oUser = userRepository.findById(reviewer);
+	
 		if(!oUser.isPresent()) throw new Exception();
 		User user = oUser.get();
+		System.out.println("reviewt " + user);
 		List<Review> entityList = reviewDAO.findByReviewer(user);
 		return entityList.stream().map(entity -> mapper.map(entity, ReviewDTO.class)).collect(Collectors.toList());
 	}

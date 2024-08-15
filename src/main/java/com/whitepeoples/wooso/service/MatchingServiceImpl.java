@@ -99,6 +99,8 @@ public class MatchingServiceImpl implements MatchingService {
 		Boolean res = false;
 		
 		// MatchingRequest를 변경할 수 있는 상태인가? 어떻게 확인? -> MatchingRequest 상태로 확인
+		
+		
 		//updateRequestMatchingDTO
 		
 		// MatchingRequest로 생성된 Matching이 있으면 fail 
