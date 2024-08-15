@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.whitepeoples.wooso.dao.GuarantorRepository;
 import com.whitepeoples.wooso.model.entity.Guarantor;
 
+
 @Service
 public class GuarantorServiceImpl implements GuarantorService{
 	@Autowired

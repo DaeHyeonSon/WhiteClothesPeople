@@ -23,7 +23,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private UserRepository userRepository;
 
 	@Override
-	public Subscription createSubscription(Integer userId, PlanType plan) {
+	public Subscription createSubscription(Integer userId, PlanType plan, String merchantId) {
 		
 		 User user = userRepository.findById(userId)
 	                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
@@ -31,6 +31,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		Subscription subscription = new Subscription();
 		subscription.setUser(user); // User 엔티티가 userId로 생성자를 가지고 있다고 가정
 		subscription.setPlan(plan);
+		subscription.setMerchant_uid(merchantId);
 		if(plan==PlanType.BASIC) {
 			subscription.setRemainingMatches(4);
 		}else {

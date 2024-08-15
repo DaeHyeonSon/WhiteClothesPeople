@@ -144,10 +144,12 @@ public class LoginController {
 				SessionDTO sessionDTO = new SessionDTO();
 				UserProfileDTO userProfileDTO = new UserProfileDTO();
 
-				Profile profile = profileservice.findByEntityIdAndEntityType(user.getUserId(), UserType.USER);
+				Optional<Profile> oProfile = profileservice.findByEntityIdAndEntityType(user.getUserId(), UserType.USER);
 
 				// DTO에 데이터 저장
-
+				Profile profile = null;
+				if(oProfile.isPresent())profile = oProfile.get();
+				
 				userProfileDTO.setUsername(user.getUsername());
 				userProfileDTO.setEmail(user.getEmail());
 				userProfileDTO.setDescription(profile != null ? profile.getUserDescription() : "No description available");
@@ -159,7 +161,7 @@ public class LoginController {
 				sessionDTO.setUserId(user.getUserId());
 				sessionDTO.setUserProfileDTO(userProfileDTO);
 				sessionDTO.setUserType(UserType.USER);
-
+				System.out.println(" @PostMapping login -> mainpage가기전 : "+ userProfileDTO);
 				httpSession.invalidate(); // 기존 세션 무효화
 				httpSession = request.getSession(true); // 새로운 세션 생성
 				httpSession.setAttribute("SessionDTO", sessionDTO); // 세션에 저장
@@ -188,7 +190,11 @@ public class LoginController {
 	            SessionDTO sessionDTO = new SessionDTO();
 				UserProfileDTO userProfileDTO = new UserProfileDTO();
 	            
-				Profile profile = profileservice.findByEntityIdAndEntityType(guarantor.getGuarantorId(), UserType.GUARANTOR);
+				Optional<Profile> oProfile = profileservice.findByEntityIdAndEntityType(guarantor.getGuarantorId(), UserType.GUARANTOR);
+
+				// DTO에 데이터 저장
+				Profile profile = null;
+				if(oProfile.isPresent())profile = oProfile.get();
 				
 				// DTO에 저장을 위한 로직
 				userProfileDTO.setUsername(guarantor.getName());

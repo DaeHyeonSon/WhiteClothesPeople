@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public boolean createUser(String username, String email, String password, String phoneNumber, String gender) {
-		if(userRepository.findByUsername(username).isPresent()){
+		if(userRepository.findByEmail(email).isPresent()){
 			return false;
 		}
 		

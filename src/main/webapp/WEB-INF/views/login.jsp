@@ -140,7 +140,7 @@
 <body>
     <div class="login-container">
         <div class="logo">
-               <img src="${pageContext.request.contextPath}/images/image-icon3.png" alt="Wooso Logo">
+               <img src="${pageContext.request.contextPath}/uploads/image-icon3.png" alt="Wooso Logo">
         </div>
         <h2>>WOOSO </h2>
         

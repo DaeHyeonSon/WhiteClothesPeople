@@ -1,6 +1,8 @@
 
 package com.whitepeoples.wooso.model.entity;
 
+import com.whitepeoples.wooso.model.entity.EnumTypes.UserType;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

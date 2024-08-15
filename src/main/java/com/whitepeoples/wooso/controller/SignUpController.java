@@ -36,6 +36,7 @@ public class SignUpController {
 						 Model model) {
 		if(!password.equals(confirmPassword)) {
 			model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+			System.out.println("signup debug1");
 			return "signup";
 		}
 		
@@ -49,6 +50,7 @@ public class SignUpController {
 			isCreated = guarantorService.createGuarantor(username, email, password, phoneNumber, gender);
 		} else {
 			model.addAttribute("error", "사용자 유형을 선택해주세요.");
+			System.out.println("signup debug2");
 			return "signup";
 		}
 		
@@ -56,6 +58,7 @@ public class SignUpController {
 			return "redirect:/login";
 		} else {
 			model.addAttribute("error","회원가입 중 오류가 발생했습니다.");
+			System.out.println("signup debug3");
 			return "signup";
 		}
 	}

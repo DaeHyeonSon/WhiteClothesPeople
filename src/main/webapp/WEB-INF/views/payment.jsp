@@ -32,11 +32,11 @@
             IMP.init(`${impCode}`);
             IMP.request_pay(
                 {
-                    pg: "nice_v2",        // PG parameter for KG Inicis
-                    pay_method: "card",   // Payment method
-                    merchant_uid: merchant_uid, // Order number
-                    name: user.planName,     // Product name
-                    amount: user.plan,           // Amount
+                    pg: "nice_v2",        
+                    pay_method: "card",   
+                    merchant_uid: merchant_uid, 
+                    name: user.planName,     
+                    amount: user.plan,           
                     buyer_email: user.email,
                     buyer_name: user.name,
                     buyer_tel: user.phone,
