@@ -16,6 +16,8 @@ public interface GuarantorRepository extends JpaRepository<Guarantor, Integer> {
 
     // 단일 조회
     Optional<Guarantor> findByGuarantorId(Integer id);
+    
+    Optional<Guarantor> findByEmail(String email);
 
     // 필드를 통한 조회
     Optional<Guarantor> findByName(String name);
