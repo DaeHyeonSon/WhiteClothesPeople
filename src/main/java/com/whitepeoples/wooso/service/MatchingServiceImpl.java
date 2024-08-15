@@ -51,7 +51,6 @@ public class MatchingServiceImpl implements MatchingService {
 		// 사용자와 주선자  프로파일이 유효한지 체크
 		if(user.getUserProfile() == null ) throw new Exception();
 		
-	
 		Optional<Subscription> oSubscription =  subscriptionRepository.findFirstByUser_UserId(user.getUserId());
 		if(!oSubscription.isPresent()) throw new Exception();
 	
