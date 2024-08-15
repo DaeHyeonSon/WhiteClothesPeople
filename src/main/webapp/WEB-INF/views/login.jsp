@@ -141,13 +141,21 @@
     <div class="login-container">
         <div class="logo">
                <img src="${pageContext.request.contextPath}/images/image-icon3.png" alt="Wooso Logo">
-            </a>
         </div>
         <h2>>WOOSO </h2>
+        
+        <!-- 에러 메시지 표시 -->
+        <c:if test="${not empty error}">
+            <div style="color: red; margin-bottom: 15px;">
+                ${error}
+            </div>
+        </c:if>
+        
         <form action="${pageContext.request.contextPath}/login" method="post">
             <input type="text" id="email" name="email" placeholder="이메일" required>
             <input type="password" id="password" name="password" placeholder="비밀번호" required>
-                        <!-- UserType 선택 -->
+        
+        <!-- UserType 선택 -->
         <div class "select-user-type">
             <label for="userType">Select User Type:</label>
             <select id="userType" name="userType" required>

@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,8 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필 설정</title>
     <style>
+    
+    	@font-face {
+            font-family: 'SBAggroB';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: GmarketSansMedium;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,6 +38,8 @@
         }
         .profile-settings-container h2 {
             text-align: center;
+            font-family: 'SBAggroB', Arial, sans-serif;
+            font-size: 24px;
             margin-bottom: 20px;
             color: #333;
         }
@@ -38,11 +55,12 @@
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #ddd; /* 이미지 테두리 */
-            cursor: pointer; /* 클릭할 수 있음을 표시 */
+            border: 2px solid #ddd; 
+            cursor: pointer; 
         }
         .profile-image-container input[type="file"] {
-            display: none; /* 파일 선택 창 숨기기 */
+            display: none; 
+            font-family: 'GmarketSansMedium', Arial, sans-serif;
         }
         .form-group {
             margin-bottom: 15px;
@@ -67,8 +85,8 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: transparent; /* 투명하게 설정 */
-            text-align: left; /* 왼쪽 정렬 */
+            background-color: transparent; /* í¬ëªíê² ì¤ì  */
+            text-align: left; /* ì¼ìª½ ì ë ¬ */
         }
         .form-group textarea {
             height: 100px;
@@ -92,21 +110,24 @@
 </head>
 <body>
     <div class="profile-settings-container">
-        <h2>프로필 설정</h2>
+        <h2>프로필 설정 </h2>
+        <form action="${pageContext.request.contextPath}/updateProfile" method="post" enctype="multipart/form-data">
+        
         <!-- Profile Image Section -->
         <div class="profile-image-container">
             <img src="https://via.placeholder.com/120" alt="Profile Picture" id="profile-picture">
+            <label for "profileImage">프로필 이미지</label>
             <input type="file" id="profile-image" name="profile-image" accept="image/*">
         </div>
         <!-- Name Section -->
         <div class="form-group">
             <label for="name">이름</label>
-            <p id="name">홍길동</p>
+            <input type="text" id="username" name="username" required>
         </div>
         <!-- Age Section -->
         <div class="form-group">
             <label for="age">나이</label>
-            <input type="text" id="age" name="age" placeholder="나이를 입력하세요">
+            <input type="text" id="age" name="age" placeholder="나이">
         </div>
         <!-- MBTI Section -->
         <div class="form-group">
@@ -133,32 +154,35 @@
         <!-- Hobbies Section -->
         <div class="form-group">
             <label for="hobbies">취미</label>
-            <input type="text" id="hobbies" name="hobbies" placeholder="취미를 입력하세요">
+            <input type="text" id="hobbies" name="hobbies" placeholder="취미">
         </div>
         <!-- Address Section -->
         <div class="form-group">
             <label for="address">주소</label>
-            <input type="text" id="address" name="address" placeholder="주소를 입력하세요">
+            <input type="text" id="address" name="address" placeholder="주소">
         </div>
         <!-- Income Section -->
         <div class="form-group">
-            <label for="income">수입</label>
+            <label for="income">수입(연봉)</label>
             <select id="income" name="income">
-                <option value="2000-2500">2,000만 원 ~ 2,500만 원</option>
-                <option value="2500-3000">2,500만 원 ~ 3,000만 원</option>
-                <option value="3000-3500">3,000만 원 ~ 3,500만 원</option>
-                <option value="3500-4000">3,500만 원 ~ 4,000만 원</option>
-                <option value="4000-4500">4,000만 원 ~ 4,500만 원</option>
-                <option value="4500-5000">4,500만 원 ~ 5,000만 원</option>
+                <option value="2000-3000">2,000 만원 ~ 3,000 만원</option>
+                <option value="3000-4000">3,000 만원 ~ 4,000 만원</option>
+                <option value="4000-5000">4,000 만원 ~ 5,000 만원</option>
+                <option value="5000-6000">5,000 만원 ~ 6,000 만원</option>
+                <option value="6000-7000">6,000 만원 ~ 7,000 만원</option>
+                <option value="7000-8000">7,000 만원 ~ 8,000 만원</option>
+                <option value="8000-9000">8,000 만원 ~ 9,000 만원</option>
+                <option value="9000-10000">9,000 만원 ~ 1억 원</option>
+                <option value="10000-">1억 원 이상 ~ </option>                
             </select>
         </div>
         <!-- Description Section -->
         <div class="form-group">
-            <label for="description">설명</label>
-            <textarea id="description" name="description" placeholder="자기소개를 입력하세요"></textarea>
+            <label for="description">자신을 보여줄 수 있는 한문장</label>
+            <textarea id="description" name="description" placeholder="자기소개"></textarea>
         </div>
         <!-- Submit Button -->
-        <button type="submit" class="submit-button">수정하기</button>
+        <button type="submit" class="submit-button">프로필 업데이트</button>
     </div>
     <script>
         document.getElementById('profile-picture').addEventListener('click', function() {

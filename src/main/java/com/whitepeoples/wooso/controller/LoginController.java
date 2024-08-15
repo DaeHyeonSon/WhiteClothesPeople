@@ -28,35 +28,39 @@ import net.bytebuddy.implementation.bytecode.Throw;
 
 @Controller
 public class LoginController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private GuarantorService guarantorService;
-	
+
 	@Autowired
 	private ProfileService profileservice;
-		
+
 	@GetMapping("/login")
-    public String loginForm(){
-        System.out.println("login() 시작");
-        return "login";
-    }
-	
+	public String loginForm() {
+		System.out.println("login() 시작");
+		return "login";
+	}
+
 	@GetMapping("/mainpage")
 	public String mainpage(HttpSession session, Model model) throws Exception {
 		System.out.println("mainpage() 시작");
 		SessionDTO sessionDTO = (SessionDTO) session.getAttribute("SessionDTO");
+
+		System.out.println("@GetMapping(\"/mainpage\") sessionDTO : " + sessionDTO);
+		if (sessionDTO == null) {
+	        throw new Exception("세션이 만료되었거나 존재하지 않습니다.");
+	    }
 		
-		System.out.println("@GetMapping(\"/mainpage\") sessionDTO : "+sessionDTO);
 		Optional<User> optionalUser = userService.findByUserId(sessionDTO.getUserId());
-		if (!optionalUser.isPresent())throw new Exception();
+		if (!optionalUser.isPresent()) throw new Exception();
 
 //		System.out.println("User 로그인 완료");
 //		if(isAuthenticated) {
 //			User user = optionalUser.get();
-		
+
 		UserProfileDTO userProfileDTO = sessionDTO.getUserProfileDTO();
 		try {
 			// Profile profile =
@@ -66,78 +70,149 @@ public class LoginController {
 			model.addAttribute("email", userProfileDTO.getEmail());
 			model.addAttribute("description", userProfileDTO.getDescription());
 			model.addAttribute("mbti", userProfileDTO.getMbti());
-			model.addAttribute("hobby", userProfileDTO.getHobby());
+			model.addAttribute("hobbies", userProfileDTO.getHobbies());
 			model.addAttribute("age", userProfileDTO.getAge());
+			model.addAttribute("userImgUrl", userProfileDTO.getUserImgUrl());
+			System.out.println("main page : "+ userProfileDTO);
+			
 		} catch (NullPointerException e) {
 			model.addAttribute("username", userProfileDTO.getUsername());
 			model.addAttribute("email", userProfileDTO.getEmail());
 			model.addAttribute("description", "No description available");
 			model.addAttribute("mbti", "N/A");
-			model.addAttribute("hobby", "N/A");
+			model.addAttribute("hobbies", "N/A");
 			model.addAttribute("age", "N/A");
+			model.addAttribute("userImgUrl", "N/A");
+			System.out.println("main page : "+ userProfileDTO);
 		}
 
 		return "mainpage";
 	}
 	
+	@GetMapping("/mainpageGuarantor")
+	public String mainpageGuarantor(HttpSession session, Model model) throws Exception {
+		System.out.println("mainpageGuarantor() 시작");
+		
+	    SessionDTO sessionDTO = (SessionDTO) session.getAttribute("SessionDTO");
+	    System.out.println("@GetMapping(\"/mainpageGuarantor\") sessionDTO : " + sessionDTO);
+	    if (sessionDTO == null) {
+	        throw new Exception("세션이 만료되었거나 존재하지 않습니다.");
+	    }
+	    
+	    Optional<Guarantor> optionalGuarantor = guarantorService.findByGuarantorId(sessionDTO.getUserId());
+		if (!optionalGuarantor.isPresent()) throw new Exception();
+
+	    UserProfileDTO userProfileDTO = sessionDTO.getUserProfileDTO();
+	    try {
+	        model.addAttribute("guarantorName", userProfileDTO.getUsername());
+	        model.addAttribute("guarantorEmail", userProfileDTO.getEmail());
+	        model.addAttribute("guarantorDescription", userProfileDTO.getDescription());
+	        model.addAttribute("guarantorHashtags", userProfileDTO.getMbti() + " " + userProfileDTO.getHobbies());
+	        model.addAttribute("guarantorLocation", "서울, 대한민국");
+	    } catch (NullPointerException e) {
+	        model.addAttribute("guarantorName", userProfileDTO.getUsername());
+	        model.addAttribute("guarantorEmail", userProfileDTO.getEmail());
+	        model.addAttribute("guarantorDescription", "No description available");
+	        model.addAttribute("guarantorHashtags", "N/A");
+	        model.addAttribute("guarantorLocation", "N/A");
+	    }
+	    
+	    return "mainpageGuarantor";
+	    
+	}
+
 	@PostMapping("/login")
-	public String login(UserLoginDTO userLoginDTO, 
-			 			HttpServletRequest request,
-						HttpSession httpSession,
-						Model model) throws Exception {
-		
-		
-//		Optional<User> optionalUser = userService.findByEmail(userLoginDTO.getEmail());
-//		Optional<Guarantor> optionalGuarantor = guarantorService.findByEmail(userLoginDTO.getEmail());
+	public String login(UserLoginDTO userLoginDTO, HttpServletRequest request, HttpSession httpSession, Model model)
+			throws Exception {
 
 		if (userLoginDTO.getUserType() == UserType.USER) {
-			
+
 			Optional<User> optionalUser = userService.findByEmail(userLoginDTO.getEmail());
-			if(!optionalUser.isPresent()) throw new Exception();
+			if (!optionalUser.isPresent()) {
+				model.addAttribute("error", "잘못된 이메일이 입력되었습니다."); // 이메일이 잘못된 경우
+	            return "login";
+			}
+
+			boolean isAuthenticated = userService.authenticate(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+			if (!isAuthenticated) {
+				model.addAttribute("error", "잘못된 비밀번호가 입력되었습니다"); // 비밀번호가 잘못된 경우
+	            return "login";
+			}
 			
-			boolean isAuthenticated = userService.authenticate(userLoginDTO.getEmail(),userLoginDTO.getPassword());
-			System.out.println("User 로그인 완료");
-			
-			if(isAuthenticated) {
+			if (isAuthenticated) {
 				User user = optionalUser.get();
 				SessionDTO sessionDTO = new SessionDTO();
 				UserProfileDTO userProfileDTO = new UserProfileDTO();
-				
-				Optional<Profile> oProfile = profileservice.findByEntityIdAndEntityType(user.getUserId(),"USER");
-				Profile profile = oProfile.get();
-					
-					
-					 // DTO에 데이터 저장
-		          
-		            userProfileDTO.setUsername(user.getUsername());
-		            userProfileDTO.setEmail(user.getEmail());
-		            userProfileDTO.setDescription(profile != null ? profile.getUserDescription() : "No description available");
-		            userProfileDTO.setMbti(profile != null ? profile.getUserMbti() : "N/A");
-		            userProfileDTO.setHobby(profile != null ? profile.getUserHobby() : "N/A");
-		            userProfileDTO.setAge(profile != null ? profile.getUserAge() : null);
 
-		            sessionDTO.setUserId(user.getUserId());
-		            sessionDTO.setUserProfileDTO(userProfileDTO);
-		            sessionDTO.setUserType(UserType.USER);
-				
+				Profile profile = profileservice.findByEntityIdAndEntityType(user.getUserId(), UserType.USER);
+
+				// DTO에 데이터 저장
+
+				userProfileDTO.setUsername(user.getUsername());
+				userProfileDTO.setEmail(user.getEmail());
+				userProfileDTO.setDescription(profile != null ? profile.getUserDescription() : "No description available");
+				userProfileDTO.setMbti(profile != null ? profile.getUserMbti() : "N/A");
+				userProfileDTO.setHobbies(profile != null ? profile.getUserHobby() : "N/A");
+				userProfileDTO.setAge(profile != null ? profile.getUserAge() : null);
+				userProfileDTO.setUserImgUrl(profile != null ? profile.getUserImgUrl() : null);
+				userProfileDTO.setAddress(profile != null ? profile.getUserAddress() : null);
+				sessionDTO.setUserId(user.getUserId());
+				sessionDTO.setUserProfileDTO(userProfileDTO);
+				sessionDTO.setUserType(UserType.USER);
+
 				httpSession.invalidate(); // 기존 세션 무효화
 				httpSession = request.getSession(true); // 새로운 세션 생성
-				httpSession.setAttribute("SessionDTO", sessionDTO);
-				
+				httpSession.setAttribute("SessionDTO", sessionDTO); // 세션에 저장
+
 				return "redirect:mainpage";
 			}
-        }
-		if (userLoginDTO.getUserType() == UserType.GUARANTOR) {
-			Optional<Guarantor> optionalGuarantor = guarantorService.findByEmail(userLoginDTO.getEmail());
-			if(!optionalGuarantor.isPresent()) throw new Exception("입력하신 정보가 주선자 계정이 아닙니다");
-			boolean isAuthenticated = guarantorService.authenticate(userLoginDTO.getEmail(),userLoginDTO.getPassword());
 			
-			if(isAuthenticated) {
-        	return "testGuarantor";
-			}
-        }
+			System.out.println("User 로그인 성공");
+		}
 		
+		if (userLoginDTO.getUserType() == UserType.GUARANTOR) {
+			
+			Optional<Guarantor> optionalGuarantor = guarantorService.findByEmail(userLoginDTO.getEmail());
+			if (!optionalGuarantor.isPresent()) {
+				model.addAttribute("error", "잘못된 이메일이 입력되었습니다."); // 이메일이 잘못된 경우
+	            return "login";
+			}			
+			boolean isAuthenticated = guarantorService.authenticate(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+			if (!isAuthenticated) {
+				model.addAttribute("error", "잘못된 비밀번호가 입력되었습니다"); // 비밀번호가 잘못된 경우
+	            return "login";
+			}
+
+			if (isAuthenticated) {
+	            Guarantor guarantor = optionalGuarantor.get();
+	            SessionDTO sessionDTO = new SessionDTO();
+				UserProfileDTO userProfileDTO = new UserProfileDTO();
+	            
+				Profile profile = profileservice.findByEntityIdAndEntityType(guarantor.getGuarantorId(), UserType.GUARANTOR);
+				
+				// DTO에 저장을 위한 로직
+				userProfileDTO.setUsername(guarantor.getName());
+				userProfileDTO.setEmail(guarantor.getEmail());
+				userProfileDTO.setDescription(profile != null ? profile.getUserDescription() : "No description available");
+	            userProfileDTO.setMbti(profile != null ? profile.getUserMbti() : "N/A");
+	            userProfileDTO.setHobbies(profile != null ? profile.getUserHobby() : "N/A");
+	            userProfileDTO.setAge(profile != null ? profile.getUserAge() : null);
+
+	            sessionDTO.setUserId(guarantor.getGuarantorId());
+	            sessionDTO.setUserProfileDTO(userProfileDTO);
+	            sessionDTO.setUserType(UserType.GUARANTOR);
+				
+	            httpSession.invalidate(); // 기존 세션 무효화
+	            httpSession = request.getSession(true); // 새로운 세션 생성
+	            httpSession.setAttribute("SessionDTO", sessionDTO); // 세션에 저장
+	            
+				return "redirect:/mainpageGuarantor";
+			}
+			System.out.println("Guarantor 로그인 완료");
+		}
+
 		model.addAttribute("error", "Invalid username or password");
-        return "login"; // 로그인 실패 시 다시 로그인 페이지로
+		return "login"; // 로그인 실패 시 다시 로그인 페이지로
 	}
+	
 }

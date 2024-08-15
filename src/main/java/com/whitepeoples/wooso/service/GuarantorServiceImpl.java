@@ -54,4 +54,9 @@ public class GuarantorServiceImpl implements GuarantorService{
 		return true;
 	}
 
+	@Override
+	public Optional<Guarantor> findByGuarantorId(Integer userId) {
+		return guarantorRepository.findById(userId);
+	}
+
 }
