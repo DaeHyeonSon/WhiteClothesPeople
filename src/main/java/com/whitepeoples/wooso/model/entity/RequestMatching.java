@@ -49,6 +49,7 @@
 package com.whitepeoples.wooso.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -56,6 +57,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "request_matching")
 @Data
+@Builder
 public class RequestMatching {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

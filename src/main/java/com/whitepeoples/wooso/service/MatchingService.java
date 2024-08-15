@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.whitepeoples.wooso.model.dto.request.CreateRequestMatchingDTO;
 import com.whitepeoples.wooso.model.dto.request.UpdateRequestMatchingDTO;
 
+
 @Service
 public interface MatchingService {
 	
