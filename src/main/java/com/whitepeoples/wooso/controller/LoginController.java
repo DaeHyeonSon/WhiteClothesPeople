@@ -4,6 +4,7 @@ import java.net.http.HttpRequest;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,15 @@ public class LoginController {
 
 	@Autowired
 	private ProfileService profileservice;
+	
+	@Value("${imp.api.key}")
+	private String apiKey;
+
+	@Value("${imp.api.secretkey}")
+	private String secretKey;
+
+	@Value("${imp.init}")
+	private String impCode;
 
 	@GetMapping("/login")
 	public String loginForm() {
@@ -48,7 +58,7 @@ public class LoginController {
 	public String mainpage(HttpSession session, Model model) throws Exception {
 		System.out.println("mainpage() 시작");
 		SessionDTO sessionDTO = (SessionDTO) session.getAttribute("SessionDTO");
-
+		model.addAttribute("impCode", impCode);
 		System.out.println("@GetMapping(\"/mainpage\") sessionDTO : " + sessionDTO);
 		if (sessionDTO == null) {
 	        throw new Exception("세션이 만료되었거나 존재하지 않습니다.");
@@ -117,7 +127,7 @@ public class LoginController {
 	        model.addAttribute("guarantorLocation", "N/A");
 	    }
 	    
-	    return "mainpageGuarantor";
+	    return "mainPageGuarantor";
 	    
 	}
 

@@ -94,6 +94,7 @@
             color: #007bff;
             text-decoration: none;
             font-family: 'GmarketSansMedium', Arial, sans-serif;
+            cursor: pointer;
         }
         .settings a:hover {
             text-decoration: underline;
@@ -131,6 +132,48 @@
             color: #333;
             font-family: 'GmarketSansMedium', Arial, sans-serif;
         }
+
+        .toggle-content {
+            display: none; /* Hidden by default */
+            margin-top: 10px;
+            background: #F8F9FA;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .status-section {
+            margin-top: 10px;
+        }
+        .status-section .status {
+            margin-bottom: 15px;
+        }
+        .status-section h3 {
+            font-size: 16px;
+            color: #333;
+            font-family: 'GmarketSansMedium', Arial, sans-serif;
+            margin-bottom: 10px;
+        }
+        .status-section .entry {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .status-section .entry img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .status-section .entry .details {
+            font-family: 'GmarketSansMedium', Arial, sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -138,7 +181,7 @@
         <div class="main-content">
             <!-- User Profile Section -->
             <div class="profile-info">
-                <img src="https://via.placeholder.com/100" alt="Profile Picture">
+                <img src="uploads/animal.jpg" alt="Profile Picture">
                 <div class="details">
                     <h1>${guarantorName}님 환영합니다!</h1>
                     <p>${guarantorEmail}</p>
@@ -147,35 +190,101 @@
             </div>
             <!-- Bio Section -->
             <div class="bio">
-                <p>${guarantorDescription}</p>
-                <p class="hashtags">${guarantorHashtags}</p>
+                <p>소개시켜드립니다 :)</p>
+                <p class="hashtags">#INTP #배구 #27</p>
             </div>
             <!-- Settings Section -->
             <div class="settings">
-                <a href="#">프로필 설정</a>
-                <a href="#">우소료 확인 😉</a>
-                <a href="#">우소리스트</a>
+            	<a href="#">프로필 수정</a>
+                <a href="#" id="toggleLink1">우소료 확인 😉</a>
+                <div id="toggleContent1" class="toggle-content">
+                    <p>2024/08 성사 시킨 매칭 수: 5</p>
+                    <p>총 수익금: 6,000원</p>
+                </div>
+
+                <a href="#" id="toggleLink2">우소리스트</a>
+                <div id="toggleContent2" class="toggle-content status-section">
+                    <div class="status">
+                        <h3>진행 중</h3>
+                        <div class="entry">
+                            <img src="https://via.placeholder.com/50" alt="User Picture">
+                            <div class="details">
+                                <p>홍민철</p>
+                                <p>매치 일자: 2024-08-15</p>
+                            </div>
+                        </div>
+                        <div class="entry">
+                            <img src="https://via.placeholder.com/50" alt="User Picture">
+                            <div class="details">
+                                <p>김민서</p>
+                                <p>매치 일자: 2024-08-13</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="status">
+                        <h3>승인됨</h3>
+                        <div class="entry">
+                            <img src="https://via.placeholder.com/50" alt="User Picture">
+                            <div class="details">
+                                <p>이서영</p>
+                                <p>매치 일자: 2024-08-01</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="status">
+                        <h3>거절됨</h3>
+                        <div class="entry">
+                            <img src="https://via.placeholder.com/50" alt="User Picture">
+                            <div class="details">
+                                <p>김민정</p>
+                                <p>매치 일자: 2024-08-03</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <a href="#">매칭 확인</a>
             </div>
         </div>
         <div class="right-sidebar">
             <!-- Suggested Users Section -->
             <div class="suggestions">
-                <h2>알 수 있는 사람들</h2>
+                <h2>알 수도 있는 주선자들</h2>
                 <div class="user">
                     <img src="https://via.placeholder.com/50" alt="User Picture">
-                    <div class="name">김철수</div>
+                    <div class="name">손대현</div>
                 </div>
                 <div class="user">
                     <img src="https://via.placeholder.com/50" alt="User Picture">
-                    <div class="name">이영희</div>
+                    <div class="name">이승언</div>
                 </div>
                 <div class="user">
                     <img src="https://via.placeholder.com/50" alt="User Picture">
-                    <div class="name">박지민</div>
+                    <div class="name">신혜원</div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleContent(id) {
+            var content = document.getElementById(id);
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+            } else {
+                content.style.display = "none";
+            }
+        }
+
+        document.getElementById("toggleLink1").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default anchor click behavior
+            toggleContent("toggleContent1");
+        });
+
+        document.getElementById("toggleLink2").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default anchor click behavior
+            toggleContent("toggleContent2");
+        });
+    </script>
 </body>
 </html>
