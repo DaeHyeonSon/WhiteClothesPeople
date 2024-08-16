@@ -110,7 +110,7 @@ public class MatchingServiceImpl implements MatchingService {
 		
 		if(!oRequestMatching.isPresent()) throw new Exception();
 		RequestMatching requestMatching = oRequestMatching.get();
-		if(requestMatching.getStatus() == MatchingRequestType.MATCHED ||
+		if(requestMatching.getStatus() == MatchingRequestType.APPROVED ||
 				requestMatching.getStatus() == MatchingRequestType.CANCELlED ||
 				requestMatching.getStatus() == MatchingRequestType.REJECTED)throw new Exception("해당 요청은 변경할 수 없는 상태입니다.");
 		
