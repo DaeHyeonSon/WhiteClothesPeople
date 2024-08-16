@@ -1,5 +1,6 @@
 package com.whitepeoples.wooso.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -38,5 +39,7 @@ public interface MatchingRepository extends JpaRepository<Matching, Integer> {
 
     // 단일 조회: responseUser와 responseMatchmaker를 기준으로 조회
     Optional<Matching> findByResponseUserAndResponseMatchmaker(User responseUser, Guarantor responseMatchmaker);
+    
+    List<Matching> findByMatchStatus(String matchStatus);
 
 }

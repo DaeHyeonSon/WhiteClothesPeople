@@ -27,6 +27,7 @@ public class Profile {
     
     @Enumerated(EnumType.STRING)
     private UserType entityType;
+    
     private Integer userAge;
     private String userMbti;
     private String userHobby;
