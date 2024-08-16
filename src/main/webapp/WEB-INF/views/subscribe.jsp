@@ -40,9 +40,12 @@
     <button class="subscription-info" onclick="unsubscribe()">구독 철회</button>
     
 </div>
-<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<!-- <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
+<script> -->
+<script src="https://cdn.iamport.kr/v1/iamport.js" defer></script>
+<script src="https://unpkg.com/axios@1.7.2/dist/axios.min.js" defer></script>
+<script defer>
 async function isSubValidate() {
     try {
         // userId를 바로 할당

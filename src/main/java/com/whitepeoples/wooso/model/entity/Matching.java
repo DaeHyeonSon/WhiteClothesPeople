@@ -73,8 +73,10 @@ public class Matching {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "response_user_id")
     private User responseUser;
-
+    
+    
     private String matchType;
     private String matchStatus;
+    private Integer matcherCount;
     private Timestamp createdAt;
 }

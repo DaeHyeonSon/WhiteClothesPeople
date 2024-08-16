@@ -7,6 +7,8 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 
+import com.whitepeoples.wooso.model.entity.EnumTypes.MatchingRequestType;
+
 @Entity
 @Table(name = "request_matching")
 @Data
@@ -26,7 +28,8 @@ public class RequestMatching {
 
     private String mandatory;
     private String description;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private MatchingRequestType status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

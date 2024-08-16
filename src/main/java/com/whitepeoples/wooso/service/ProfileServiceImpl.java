@@ -64,14 +64,15 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public UserProfileDTO saveProfile(SessionDTO sessionDTO, UserProfileUpdateDTO userProfileUpdateDTO) throws Exception {
-		
+		User user = null;
 		if (sessionDTO != null) {
 			// 사용자 엔티티를 조회하여 업데이트
-			User user = userService.findByUserId(sessionDTO.getUserId())
-					.orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+			Optional<User> oUser = userService.findByUserId(sessionDTO.getUserId());
+			if(!oUser.isPresent())throw new Exception("현재 존재하지 않는 계정입니다.");
+			user = oUser.get();
 		}
-		
-		Optional<Profile> oProfile = findByEntityIdAndEntityType(sessionDTO.getUserId(), UserType.USER);
+
+		Optional<Profile> oProfile = findByEntityIdAndEntityType(sessionDTO.getUserId(), sessionDTO.getUserType());
 		Profile profile = null;
 
 		if (!oProfile.isPresent())profile = new Profile();
@@ -85,12 +86,14 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setUserHobby(userProfileUpdateDTO.getHobbies());
 		profile.setUserAge(userProfileUpdateDTO.getAge());
 		profile.setEntityId(sessionDTO.getUserId());
-		profile.setEntityType(sessionDTO.getUserType());
 		
+//		String type = sessionDTO.getUserType().name();
+		if(sessionDTO.getUserType() == UserType.USER)profile.setEntityType(UserType.USER);
+		if(sessionDTO.getUserType() == UserType.GUARANTOR)profile.setEntityType(UserType.GUARANTOR);
 		
 		if(userProfileUpdateDTO.getProfileImage() != null ) {
 			Optional<String> userImgUrl = fileService.uploadFile(userProfileUpdateDTO.getProfileImage());
-			System.out.println("이미지는 null 이 아님!");
+	
 			if(userImgUrl.isPresent())profile.setUserImgUrl(userImgUrl.get());
 		}
 		profile = profileRepository.save(profile);
@@ -98,7 +101,8 @@ public class ProfileServiceImpl implements ProfileService {
 		// 
 		UserProfileDTO userProfileDTO = modelMapper.map(profile, UserProfileDTO.class);
 		userProfileDTO.setUsername(userProfileUpdateDTO.getUsername());
-		
+		user.setVerificationStatus(true);
+		user.setUserProfile(profile);
 		// 현재 이메일이 업데이트가 안되는 상황임 일단 이렇게라도 세션을 유지.. 
 		// 세션은 update 발생시마다 DB의 값과 동기화를 해주야함
 		

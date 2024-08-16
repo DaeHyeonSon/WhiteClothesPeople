@@ -18,45 +18,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.whitepeoples.wooso.dao.UserRepository;
+import com.whitepeoples.wooso.model.dto.SessionDTO;
 import com.whitepeoples.wooso.model.entity.Subscription;
 import com.whitepeoples.wooso.model.entity.User;
 import com.whitepeoples.wooso.model.entity.EnumTypes.PlanType;
 import com.whitepeoples.wooso.service.SubscriptionService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/subscription")
 public class SubscriptionController {
-	
-    @Value("${imp.api.key}")
-    private String apiKey;
 
-    @Value("${imp.api.secretkey}")
-    private String secretKey;
+	@Value("${imp.api.key}")
+	private String apiKey;
 
-    @Value("${imp.init}")
-    private String impCode;
+	@Value("${imp.api.secretkey}")
+	private String secretKey;
 
-    private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
+	@Value("${imp.init}")
+	private String impCode;
 
-    @Autowired
-    private SubscriptionService subscriptionService;
+	private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private SubscriptionService subscriptionService;
 
-    // 구독 view
-    @GetMapping("")
-    public String subscriptionView(Model model) {
-        logger.info("subscriptionView() ----");
-        model.addAttribute("impCode", impCode);
-        return "subscribe";
-    }
+	@Autowired
+	private UserRepository userRepository;
 
-    // 사용자 정보 가져오기
-    @GetMapping("/details")
+	// 구독 view
+	@GetMapping("")
+	public String subscriptionView(Model model) {
+		logger.info("subscriptionView() ----");
+		model.addAttribute("impCode", impCode);
+		return "subscribe";
+	}
+
+	// 사용자 정보 가져오기
+	@GetMapping("/details")
     @ResponseBody
-    public Map<String, Object> getUserDetails() {
-    	Integer userId = 1;
+//  public Map<String, Object> getUserDetails() {
+//	Integer userId = 1;
+  public Map<String, Object> getUserDetails(HttpSession session) {
+		
+		System.out.println("GetMapping /details 호출됨");
+		
+    	SessionDTO sessionDTO = (SessionDTO) session.getAttribute("SessionDTO");
+    	System.out.println("@GetMapping(\"/details\") session : "+sessionDTO);
+    	Integer userId = sessionDTO.getUserId();
     	 User user = userRepository.findById(userId)
                  .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
         Map<String, Object> dt = new HashMap<>();
@@ -69,91 +79,100 @@ public class SubscriptionController {
         return dt;
     }
 
-    // 구독 여부 확인
-    @PostMapping("/check-subscription")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> checkSubscription(@RequestParam("userId") Integer userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
+	// 구독 여부 확인
+	@PostMapping("/check-subscription")
+	@ResponseBody
+//	public ResponseEntity<Map<String, Object>> checkSubscription(@RequestParam("userId") Integer userId) {
+	public ResponseEntity<Map<String, Object>> checkSubscription(HttpSession session) {
+		System.out.println("@PostMapping /check-subscription 호출됨");
+    	SessionDTO sessionDTO = (SessionDTO) session.getAttribute("SessionDTO");
+    	Integer userId = sessionDTO.getUserId();
+    	
+    	System.out.println("@PostMapping(\"/check-subscription\") session : "+sessionDTO);
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
 
-        Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
-        Map<String, Object> response = new HashMap<>();
+		Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
+		Map<String, Object> response = new HashMap<>();
 
-        if (currentSubscription.isPresent()) {
-            Subscription subscription = currentSubscription.get();
-            logger.info("User {} is already subscribed.", userId);
-            response.put("isSubscribed", true);
-            response.put("subscriptionName", subscription.getPlan().name());
-            response.put("renewalDate", subscription.getNextPayDate().toString());
-        } else {
-            logger.info("User {} is not subscribed.", userId);
-            response.put("isSubscribed", false);
-        }
+		if (currentSubscription.isPresent()) {
+			Subscription subscription = currentSubscription.get();
+			logger.info("User {} is already subscribed.", userId);
+			response.put("isSubscribed", true);
+			response.put("subscriptionName", subscription.getPlan().name());
+			response.put("renewalDate", subscription.getNextPayDate().toString());
+		} else {
+			logger.info("User {} is not subscribed.", userId);
+			response.put("isSubscribed", false);
+		}
 
-        return ResponseEntity.ok(response);
-    }
+		return ResponseEntity.ok(response);
+	}
 
-    // 구독 신청
-    @PostMapping("/subscribe")
-    public ResponseEntity<String> subscribe(@RequestParam("userId") Integer userId,
-                                            @RequestParam("plan") PlanType plan,
-                                            @RequestParam("merchant_uid") String merchantId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
+	// 구독 신청
+	@PostMapping("/subscribe")
+	public ResponseEntity<String> subscribe(@RequestParam("userId") Integer userId, @RequestParam("plan") PlanType plan,
+			@RequestParam("merchant_uid") String merchantId) {
+		
+		System.out.println("@PostMapping /subscribe 호출됨");
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
 
-        Subscription newSubscription = subscriptionService.createSubscription(userId, plan, merchantId);
-        logger.info("New subscription created: User={}, Subscription={}", userId, newSubscription.getSubscriptionId());
+		Subscription newSubscription = subscriptionService.createSubscription(userId, plan, merchantId);
+		logger.info("New subscription created: User={}, Subscription={}", userId, newSubscription.getSubscriptionId());
 
-        return ResponseEntity.ok("구독이 성공적으로 신청되었습니다.");
-    }
-    
-    @GetMapping("/currentStatus")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> subscribeStatus(@RequestParam("userId") Integer userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
+		return ResponseEntity.ok("구독이 성공적으로 신청되었습니다.");
+	}
 
-        Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
+	@GetMapping("/currentStatus")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> subscribeStatus(@RequestParam("userId") Integer userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
 
-        Map<String, Object> response = new HashMap<>();
-        if (currentSubscription.isPresent()) {
-            Subscription subscription = currentSubscription.get();
-            response.put("subscriptionName", subscription.getPlan().name());  // Assuming `getPlanType()` returns an Enum with a `name()` method
-            response.put("renewalDate", subscription.getNextPayDate().toString());  // Adjust if `getRenewalDate()` returns a date format you need
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("message", "No subscription found.");
-            return ResponseEntity.ok(response);
-        }
-    }
+		Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
 
-    // 구독 취소
-    @PostMapping("/unsubscribe")
-    public ResponseEntity<String> unsubscribe(@RequestParam("userId") Integer userId) {
-        // 사용자 조회
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
+		Map<String, Object> response = new HashMap<>();
+		if (currentSubscription.isPresent()) {
+			Subscription subscription = currentSubscription.get();
+			response.put("subscriptionName", subscription.getPlan().name()); // Assuming `getPlanType()` returns an Enum
+																				// with a `name()` method
+			response.put("renewalDate", subscription.getNextPayDate().toString()); // Adjust if `getRenewalDate()`
+																					// returns a date format you need
+			return ResponseEntity.ok(response);
+		} else {
+			response.put("message", "No subscription found.");
+			return ResponseEntity.ok(response);
+		}
+	}
 
-        // 현재 구독 상태 조회
-        Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
+	// 구독 취소
+	@PostMapping("/unsubscribe")
+	public ResponseEntity<String> unsubscribe(@RequestParam("userId") Integer userId) {
+		// 사용자 조회
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
 
-        // 구독이 존재하지 않으면 응답
-        if (!currentSubscription.isPresent()) {
-            logger.info("No subscription found for user {}", userId);
-            return ResponseEntity.badRequest().body("구독중인 서비스가 없습니다.");
-        }
+		// 현재 구독 상태 조회
+		Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
 
-        // 구독 취소 가능 여부 확인
-        if (!subscriptionService.canCancelSubscription(currentSubscription)) {
-            logger.info("Subscription cancellation criteria not met for user {}", userId);
-            return ResponseEntity.badRequest().body("구독 취소 기준을 충족하지 않습니다.");
-        }
+		// 구독이 존재하지 않으면 응답
+		if (!currentSubscription.isPresent()) {
+			logger.info("No subscription found for user {}", userId);
+			return ResponseEntity.badRequest().body("구독중인 서비스가 없습니다.");
+		}
 
-        // 구독 취소
-        subscriptionService.cancelSubscription(currentSubscription);
-        logger.info("Subscription cancelled for user {}", userId);
+		// 구독 취소 가능 여부 확인
+		if (!subscriptionService.canCancelSubscription(currentSubscription)) {
+			logger.info("Subscription cancellation criteria not met for user {}", userId);
+			return ResponseEntity.badRequest().body("구독 취소 기준을 충족하지 않습니다.");
+		}
 
-        return ResponseEntity.ok("구독이 성공적으로 취소되었습니다.");
-    }
+		// 구독 취소
+		subscriptionService.cancelSubscription(currentSubscription);
+		logger.info("Subscription cancelled for user {}", userId);
+
+		return ResponseEntity.ok("구독이 성공적으로 취소되었습니다.");
+	}
 
 }

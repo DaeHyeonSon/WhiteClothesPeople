@@ -185,7 +185,7 @@
             <!-- Settings Section -->
             <div class="settings">
                 <a href="${pageContext.request.contextPath}/profileEdit">프로필 설정</a>
-                <a href="#">우소좀여(매칭)</a>
+                <a href="${pageContext.request.contextPath}/matching">우소좀여(매칭)</a>
                 <a href="#">구독 확인</a>
                 <a href="#">매칭 확인</a>
             </div>

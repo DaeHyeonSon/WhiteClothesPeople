@@ -19,13 +19,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.whitepeoples.wooso.dao.ProfileRepository;
 import com.whitepeoples.wooso.dao.UserRepository;
+import com.whitepeoples.wooso.model.dto.SessionDTO;
 import com.whitepeoples.wooso.model.entity.Profile;
 import com.whitepeoples.wooso.model.entity.Subscription;
 import com.whitepeoples.wooso.model.entity.User;
 import com.whitepeoples.wooso.model.entity.EnumTypes.PlanType;
+import com.whitepeoples.wooso.model.entity.EnumTypes.UserType;
 import com.whitepeoples.wooso.service.PaymentService;
 import com.whitepeoples.wooso.service.ProfileService;
 import com.whitepeoples.wooso.service.SubscriptionService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/payment")
@@ -97,12 +101,15 @@ public class PaymentController {
 
 	@GetMapping("/details")
 	@ResponseBody
-	public Map<String, Object> getUserDetails() {
-		Integer userId = 1;
+//	public Map<String, Object> getUserDetails() {
+//		Integer userId = 1;
+	public Map<String, Object> getUserDetails(HttpSession httpSession) {
+		SessionDTO sessionDTO = (SessionDTO) httpSession.getAttribute("SessionDTO");
+		Integer userId = sessionDTO.getUserId();	
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다: " + userId));
 
-		Profile profile = profileRepository.findByEntityIdAndEntityType(userId, "USER")
+		Profile profile = profileRepository.findByEntityIdAndEntityType(userId, UserType.USER)
 				.orElseThrow(() -> new IllegalArgumentException("해당 Profile 존재 X: " + userId));
 		Optional<Subscription> currentSubscription = subscriptionService.findByUser(user);
 		// Subscription subscription = currentSubscription.get();

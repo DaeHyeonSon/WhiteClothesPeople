@@ -126,7 +126,7 @@ public class LoginController {
 			throws Exception {
 
 		if (userLoginDTO.getUserType() == UserType.USER) {
-
+			System.out.println("post /login UserType : "+userLoginDTO.getUserType());
 			Optional<User> optionalUser = userService.findByEmail(userLoginDTO.getEmail());
 			if (!optionalUser.isPresent()) {
 				model.addAttribute("error", "잘못된 이메일이 입력되었습니다."); // 이메일이 잘못된 경우

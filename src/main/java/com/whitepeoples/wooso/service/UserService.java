@@ -13,7 +13,7 @@ public interface UserService {
 	boolean createUser(String username, String email, String password, String phoneNumber, String gender);
 
 	Optional<User> findByEmail(String email);
-	
+
 	Optional<User> findByUserId(Integer userId);
 
 	

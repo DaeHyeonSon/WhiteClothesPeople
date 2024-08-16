@@ -18,7 +18,6 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "profile")
-@Data
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
